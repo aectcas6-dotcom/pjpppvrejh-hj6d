@@ -8,8 +8,8 @@ import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
 import jwt from "jsonwebtoken";
 import TelegramBot from 'node-telegram-bot-api';
-import { query, initializeDatabase } from "./src/lib/db";
-import { MarketType } from "./models/index";
+import { query, initializeDatabase } from "./src/lib/db.ts";
+import { MarketType } from "./models/index.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
