@@ -9,6 +9,7 @@ import http from "http";
 import jwt from "jsonwebtoken";
 import TelegramBot from 'node-telegram-bot-api';
 import { query, initializeDatabase } from "./src/lib/db";
+import { MarketType } from "./models/index";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -263,7 +264,7 @@ bot.on('successful_payment', async (msg) => {
 
 async function startServer() {
   const app = express();
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = 3000;
 
   // Initialize DB
   try {
@@ -274,7 +275,7 @@ async function startServer() {
   }
 
   // Ensure public/logos directory exists
-  const logosDir = path.join(process.cwd(), "public", "logos");
+  const logosDir = path.join(__dirname, "public", "logos");
   if (!fs.existsSync(logosDir)) {
     fs.mkdirSync(logosDir, { recursive: true });
   }
@@ -899,9 +900,9 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     // Serve static files in production
-    app.use(express.static(path.join(process.cwd(), "dist")));
+    app.use(express.static(path.join(__dirname, "dist")));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(process.cwd(), "dist", "index.html"));
+      res.sendFile(path.join(__dirname, "dist", "index.html"));
     });
   }
 
@@ -959,7 +960,7 @@ async function startServer() {
     }
   }
 
-  function subscribeTickersBybit(ws: WebSocket, exchange: string, marketType: any, tickers: any[]) {
+  function subscribeTickersBybit(ws: WebSocket, exchange: string, marketType: MarketType, tickers: any[]) {
     if (!tickers || tickers.length === 0) return;
     const subMsg = {
       op: 'subscribe',
@@ -990,7 +991,7 @@ async function startServer() {
     });
   }
 
-  function subscribeTickersBinance(ws: WebSocket, exchange: string, marketType: any, tickers: any[]) {
+  function subscribeTickersBinance(ws: WebSocket, exchange: string, marketType: MarketType, tickers: any[]) {
     if (!tickers || tickers.length === 0) return;
     const subMsg = {
       method: "SUBSCRIBE",
